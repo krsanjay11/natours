@@ -26,7 +26,7 @@ const tours = JSON.parse(
 
 // 2) Route handlers
 const getAllTours = (req, res) => {
-  console.log(req.requestTime);
+  // console.log(req.requestTime);
   res.status(200).json({
     status: 'success',
     requestedAt: req.requestTime,

@@ -9,6 +9,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 
 const AppError = require('./utils/appError');
 const GlobalErrorHandler = require('./controllers/errorController');
@@ -46,7 +47,7 @@ app.use(
 );
 
 // development logging
-console.log(process.env.NODE_ENV, 'env');
+// console.log(process.env.NODE_ENV, 'env');
 if (process.env.NODE_ENV === 'development') {
   // console.log('you are in', process.env.NODE_ENV, 'env');
   app.use(morgan('dev')); // 3rd party middleware help in login, logger -> GET /api/v1/tours/22 404 4.694 ms - 40
@@ -86,6 +87,8 @@ app.use(
     ], // allow few duplicates in query string
   }),
 ); // wide list parameters
+
+// app.use(compression); // it will compress text, not images, video
 
 // Test Middleware
 // create our own middleware function, define a middleware, apply to below functions only, not above functions, order matters in express

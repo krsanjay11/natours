@@ -22,7 +22,7 @@ class APIFeatures {
 
   sort() {
     if (this.queryString.sort) {
-      console.log(this.queryString.sort); // if sort key comes mulitple times, express makes it in array [ 'duration', 'price' ], after hpp, using last parameter
+      // console.log(this.queryString.sort); // if sort key comes mulitple times, express makes it in array [ 'duration', 'price' ], after hpp, using last parameter
       const sortBy = this.queryString.sort.split(',').join(' ');
       // console.log(sortBy); // -price ratingsAverage, -ve means decending
       this.query = this.query.sort(sortBy);
@@ -36,7 +36,7 @@ class APIFeatures {
   limitFields() {
     if (this.queryString.fields) {
       const fields = this.queryString.fields.split(',').join(' ');
-      console.log(fields); // ?fields=name,duration,difficulty,price -> name duration difficulty price
+      // console.log(fields); // ?fields=name,duration,difficulty,price -> name duration difficulty price
       this.query = this.query.select(fields); // selecting field name operation called projecting
     } else {
       this.query = this.query.select('-__v'); // - means excluding the field

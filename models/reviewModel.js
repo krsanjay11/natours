@@ -70,7 +70,7 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
       },
     },
   ]); // this points to current model, need to call aggregate on model directly
-  console.log(stats);
+  // console.log(stats); // useful
   if (stats.length > 0) {
     await Tour.findByIdAndUpdate(tourId, {
       ratingsQuantity: stats[0].nRating,
