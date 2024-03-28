@@ -24,7 +24,7 @@ const viewRouter = require('./routes/viewRoutes');
 
 const app = express(); // express adds bunch of method to our app variable
 
-// app.enable('trust proxy'); // it help for secure https connections, built-in express
+app.enable('trust proxy'); // it help for secure https connections, built-in express
 
 // tell express what template engine we will use, express supports most common engines, we don't need to install or require pug, it will happen begind the scenes internally in express, our pug templates called views in express
 app.set('view engine', 'pug');
