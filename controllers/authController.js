@@ -13,7 +13,7 @@ const signToken = (id) =>
     expiresIn: process.env.JWT_EXPIRES_IN,
   }); // payload - data that we need to store, string, obj{expiretime}
 
-const createSendToken = (user, statusCode, res) => {
+const createSendToken = (user, statusCode, req, res) => {
   const token = signToken(user._id);
   const cookieOptions = {
     expires: new Date(
@@ -21,6 +21,7 @@ const createSendToken = (user, statusCode, res) => {
     ),
     secure: false, // it will only be sent in encrypted connection
     httpOnly: true, // cannot be access or modified in any way by browser
+    // secure: req.secure || req.header['x-forwarded-proto'] === 'https',
   };
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
   res.cookie('jwt', token, cookieOptions);
@@ -52,7 +53,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   // console.log(url);
   await new Email(newUser, url).sendWelcome();
 
-  createSendToken(newUser, 201, res);
+  createSendToken(newUser, 201, req, res);
   // const token = signToken(newUser._id);
   // res.status(201).json({
   //   status: 'success',
@@ -80,7 +81,7 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError('Incorrect email or password', 401));
   }
   // 3) if everything ok, send token to client
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
   // const token = signToken(user._id);
 
   // res.status(200).json({
@@ -249,7 +250,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   // 3) update changedPasswordAt property for the user
   // 4) Log the user in, send JWT
 
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
   // const token = signToken(user._id);
   // res.status(200).json({
   //   status: 'success',
@@ -276,7 +277,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
   // 4) log user in, send JWT
 
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
   // token = signToken(user._id);
   // res.status(200).send({
   //   status: 'success',

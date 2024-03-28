@@ -1,3 +1,4 @@
+/* eslint-disable node/no-extraneous-require */
 /* eslint-disable import/no-extraneous-dependencies */
 // configure our application
 const path = require('path');
@@ -9,7 +10,8 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
-const compression = require('compression');
+const cors = require('cors');
+// const compression = require('compression');
 
 const AppError = require('./utils/appError');
 const GlobalErrorHandler = require('./controllers/errorController');
@@ -21,12 +23,27 @@ const viewRouter = require('./routes/viewRoutes');
 
 const app = express(); // express adds bunch of method to our app variable
 
+// app.enable('trust proxy'); // it help for secure https connections, built-in express
+
 // tell express what template engine we will use, express supports most common engines, we don't need to install or require pug, it will happen begind the scenes internally in express, our pug templates called views in express
 app.set('view engine', 'pug');
 // app.set('views', './views'); //'./views' - the path we provide here is always relative to the directive from where we launch our node application
 app.set('views', path.join(__dirname, 'views')); // we can use path module, so path is a build in node module which is used to manipulate the path name, path.join will add /
 
 // 1) Global Middlewares
+// Implement CORS
+app.use(cors()); // it will return a middleware function which will add couple of headers to our response, it enable for all the routes, // Access-Contol-Allow_Origin *
+
+// if we want our frontend app/origin (natours.com) to interact with backend (api.natours.com) which is in a different domain, so provide access from origin
+// app.use(
+//   cors({
+//     origin: 'https://www.natours.com',
+//   }),
+// );
+
+app.options('*', cors()); // just just another http method that we can respond to when there is a preflight phase, apply to all routes
+// app.options('/api/v1/tours/:id', cors());
+
 // Serving static files
 // app.use(express.static(`${__dirname}/public`)); // give direct access to static resource/folder which can we access by browser
 app.use(express.static(path.join(__dirname, 'public')));
@@ -118,6 +135,7 @@ app.use((req, res, next) => {
 
 // 3) mounting the router - connect tourRouter, userRouter with our application
 app.use('/', viewRouter);
+// app.use('/api/v1/tours', cors(), tourRouter); // middleware, use cors for only this route
 app.use('/api/v1/tours', tourRouter); // middleware
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);

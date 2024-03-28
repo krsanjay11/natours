@@ -49,3 +49,11 @@ process.on('unhandledRejection', (err) => {
 
 // uncaught exceptions
 // console.log(x);
+
+// process.on('SIGTERM', () => {
+//   console.log('👋 SIGTERM RECEIVED. shutting down gracefully');
+//   server.close(() => {
+//     // it will first handle all the current request then shutdown
+//     console.log('🔥 process terminated!');
+//   });
+// });
