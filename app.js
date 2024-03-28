@@ -19,6 +19,7 @@ const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
+const bookingController = require('./controllers/bookingController');
 const viewRouter = require('./routes/viewRoutes');
 
 const app = express(); // express adds bunch of method to our app variable
@@ -78,6 +79,12 @@ const limiter = rateLimit({
   message: 'Too Many requests from this IP, please try again in an hour!',
 });
 app.use('/api', limiter); // affect all the routes
+
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  bookingController.webhookCheckout,
+); // why we use here, not in booking router, when we receive the body from stripe, then the stripe function needs to read the body in a raw form so basically as a string and not as JSON, as soon as request it body parser middleware like express.json the body will be parse and converted to JSON, we still need to parse the body in raw format
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' })); // middleware - a function that can modify the incoming request data, stands in middele or between of a request and response, a step that request go through while it is been processed, here data from the body is added to request object, can accept upto 10 kb
