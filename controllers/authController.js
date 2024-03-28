@@ -168,7 +168,7 @@ exports.isLoggedIn = async (req, res, next) => {
 
 exports.logout = (req, res) => {
   const cookieOptions = {
-    expires: new Date(Date.now() + 10 * 1000),,
+    expires: new Date(Date.now() + 10 * 1000),
     secure: false, // it will only be sent in encrypted connection
     httpOnly: true, // cannot be access or modified in any way by browser
     // secure: req.secure || req.header['x-forwarded-proto'] === 'https',
