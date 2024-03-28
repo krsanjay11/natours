@@ -167,10 +167,18 @@ exports.isLoggedIn = async (req, res, next) => {
 };
 
 exports.logout = (req, res) => {
-  res.cookie('jwt', 'loggedout', {
-    expires: new Date(Date.now() + 10 * 1000),
-    httpOnly: true,
-  });
+  const cookieOptions = {
+    expires: new Date(Date.now() + 10 * 1000),,
+    secure: false, // it will only be sent in encrypted connection
+    httpOnly: true, // cannot be access or modified in any way by browser
+    // secure: req.secure || req.header['x-forwarded-proto'] === 'https',
+  };
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  res.cookie('jwt', 'loggedout', cookieOptions);
+  // res.cookie('jwt', 'loggedout', {
+  //   expires: new Date(Date.now() + 10 * 1000),
+  //   httpOnly: true,
+  // });
   res.status(200).json({ status: 'success' });
 };
 
