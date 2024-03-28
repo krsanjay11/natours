@@ -36,7 +36,8 @@ export const logout = async () => {
       // url: 'http://127.0.0.1:3000/api/v1/users/logout',
       url: '/api/v1/users/logout',
     });
-    if (res.data.status === 'success') location.reload(true); // force reload from the server, not from browser cache so fresh page comming down from the server
+    if (res.data.status === 'success') location.assign('/');
+    // if (res.data.status === 'success') location.reload(true); // force reload from the server, not from browser cache so fresh page comming down from the server
   } catch (err) {
     showAlert('error', 'Error logging out! Try again.');
   }
